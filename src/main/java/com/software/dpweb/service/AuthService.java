@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.software.dpweb.entity.User;
+import com.software.dpweb.pojo.LoginAPIData;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.repository.UserRepository;
 
@@ -37,6 +38,29 @@ public class AuthService {
 		}
 		
 		
+		
+		
+	}
+	
+	
+	
+	
+	
+	public Object userLogIn(LoginAPIData loginAPIData) throws Exception {
+		
+		Optional<User> dbData = userRepository.findByEmail(loginAPIData.getEmail());
+		
+		if(dbData.isEmpty()) {
+			throw new Exception("Email is not registred, Please Signup...!");
+		}else {
+			User userData = dbData.get();
+			boolean isMatches = passwordEncoder.matches(loginAPIData.getPassword(), userData.getPassword());
+			if(isMatches==true) {
+				return userData;
+			}else {
+				throw new Exception("password is not matching..Please try again");
+			}
+		}
 		
 		
 	}

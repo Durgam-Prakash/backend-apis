@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.dpweb.pojo.LoginAPIData;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.service.AuthService;
 
@@ -34,5 +35,23 @@ public class AuthController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
 	}
+	
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> userLogin(@Valid @RequestBody LoginAPIData loginAPIData) throws Exception{
+		
+		Object userLogIn = authService.userLogIn(loginAPIData);
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("Result", "Success");
+		responseMap.put("Message", "You have logged in success");
+		responseMap.put("Data", userLogIn);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+	}
+	
+	
+	
+	
+	
 
 }
