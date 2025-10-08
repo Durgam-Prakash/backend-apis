@@ -32,6 +32,8 @@ public class User {
 	private String password;
 
 	private String mobile;
+	
+	private String passwordResetKey;
 
 	private LocalDateTime createdOn = LocalDateTime.now();
 	private Boolean isActive = true;

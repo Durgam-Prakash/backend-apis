@@ -11,5 +11,6 @@ import com.software.dpweb.entity.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 
 	Optional<User> findByEmail(String email);
+	Optional<User> findByPasswordResetKey(String passwordResetKey);
 	
 }

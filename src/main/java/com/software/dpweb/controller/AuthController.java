@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.dpweb.pojo.ForgotPasswordAPIData;
 import com.software.dpweb.pojo.LoginAPIData;
+import com.software.dpweb.pojo.ResetPassword;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.service.AuthService;
 
@@ -47,6 +49,38 @@ public class AuthController {
 		responseMap.put("Data", userLogIn);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+	}
+	
+	
+	
+	@PostMapping("/forgot")
+	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordAPIData forgotPasswordAPIData) throws Exception{
+		
+		authService.forgotPassword(forgotPasswordAPIData);
+		
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("Result", "Success");
+		responseMap.put("Message", "sent an email please check for rest your password");
+		responseMap.put("Data", forgotPasswordAPIData);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		
+	}
+	
+	
+	@PostMapping("/reset")
+	
+      public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword resetPassword) throws Exception{
+		
+		authService.resetPassword(resetPassword);
+		
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("Result", "Success");
+		responseMap.put("Message", "sent an email please check for rest your password");
+		responseMap.put("Data", resetPassword);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		
 	}
 	
 	
