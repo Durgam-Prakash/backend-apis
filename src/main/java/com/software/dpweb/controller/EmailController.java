@@ -69,7 +69,7 @@ public class EmailController {
 	    String toEmail = "prakashdurgam8779@gmail.com";
 	    String subject = "Test Mail";
 
-	    String mailBody = "";
+	    
 
 	    emailService.sendHtmlTemplateMail(fromEmail, toEmail, subject, "test-email");
 
