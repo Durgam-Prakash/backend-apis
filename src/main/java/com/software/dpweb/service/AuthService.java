@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +33,10 @@ public class AuthService {
 	
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
+	private Logger logger = LoggerFactory.getLogger(AuthService.class);
+	
+	
+	
 	public Object createAccount(SignupAPIData signupAPIData) throws Exception {
 		
 		Optional<User> dbData = userRepository.findByEmail(signupAPIData.getEmail());
@@ -42,9 +48,14 @@ public class AuthService {
 			user.setPassword(passwordEncoder.encode(signupAPIData.getPassword()));
 			user.setMobile(signupAPIData.getMobile());
 			User dbUserData = userRepository.save(user);
+			
+			logger.info("Account Created : email{}",signupAPIData.getEmail());
+			
 			return dbUserData;
 		}
 		else{
+			logger.error("Account Creation Failed : email={}",signupAPIData.getEmail());
+
 			throw new Exception("User already Exist...!");
 		}
 		
