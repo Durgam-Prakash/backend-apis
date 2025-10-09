@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.dpweb.pojo.ForgotPasswordAPIData;
+import com.software.dpweb.pojo.IpData;
 import com.software.dpweb.pojo.LoginAPIData;
 import com.software.dpweb.pojo.ResetPassword;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.service.AuthService;
+import com.software.dpweb.service.IpDataService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -26,6 +29,11 @@ public class AuthController {
 	
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private IpDataService ipDataService;
+	
+	
 	
 	@PostMapping("/create-account")
 	public ResponseEntity<?> createAccount(@Valid @RequestBody SignupAPIData signupAPIData) throws Exception{
@@ -41,7 +49,9 @@ public class AuthController {
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> userLogin(@Valid @RequestBody LoginAPIData loginAPIData) throws Exception{
+	public ResponseEntity<?> userLogin(@Valid @RequestBody LoginAPIData loginAPIData,HttpServletRequest request) throws Exception{
+		
+		IpData ipData = ipDataService.getIpDataFromIpInfo(request.getRemoteAddr());
 		
 		Map<String, Object> userLogIn = authService.userLogIn(loginAPIData);
 		
@@ -49,6 +59,7 @@ public class AuthController {
 		responseMap.put("Result", "Success");
 		responseMap.put("Message", "You have logged in success");
 		responseMap.put("Data", userLogIn);
+		responseMap.put("IpData", ipData);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", userLogIn.get("token").toString());

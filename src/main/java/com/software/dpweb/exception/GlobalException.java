@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 
 @ControllerAdvice
 public class GlobalException {
@@ -36,6 +37,18 @@ public class GlobalException {
 		response.put("Result", "Failed");
 		response.put("Message", ex.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		
+	}
+	
+	
+	
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<?> handleHttpClientErrorException(HttpClientErrorException ex){
+		
+		Map<String, String> response = new HashMap<>();
+		response.put("Result", "Failed");
+		response.put("Message", ex.getMessage());
+		return ResponseEntity.status(ex.getStatusCode()).body(response);
 		
 	}
 	
