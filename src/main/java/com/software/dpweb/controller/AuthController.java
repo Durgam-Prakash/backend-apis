@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,13 +43,17 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<?> userLogin(@Valid @RequestBody LoginAPIData loginAPIData) throws Exception{
 		
-		Object userLogIn = authService.userLogIn(loginAPIData);
+		Map<String, Object> userLogIn = authService.userLogIn(loginAPIData);
+		
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("Result", "Success");
 		responseMap.put("Message", "You have logged in success");
 		responseMap.put("Data", userLogIn);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", userLogIn.get("token").toString());
+		
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(responseMap);
 	}
 	
 	

@@ -72,7 +72,7 @@ public class FileUploadService {
 		
 		Path uploadPath = Paths.get(PDF_UPLOAD_PATH +uploadPdfFileName);
 		Files.copy(inputFile.getInputStream(), uploadPath);
-		s3FileService.uploadFileToS3(inputFile, uploadPdfFileName);
+		//s3FileService.uploadFileToS3(inputFile, uploadPdfFileName);
 		
 	}
 

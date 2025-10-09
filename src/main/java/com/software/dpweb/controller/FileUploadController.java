@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.software.dpweb.service.FileUploadService;
+import com.software.dpweb.service.JwtService;
+
+import io.jsonwebtoken.Claims;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -20,10 +24,30 @@ public class FileUploadController {
 	
 	@Autowired
 	private FileUploadService fileUploadService;
+	
+	@Autowired
+	private JwtService jwtService;
+	
 
 	@PostMapping("/images")
-	public ResponseEntity<?> uploadImages(@RequestParam("input_file") MultipartFile inputFile) throws Exception{
+	public ResponseEntity<?> uploadImages(@RequestHeader("Authorization")String jwtToken, @RequestParam("input_file") MultipartFile inputFile) throws Exception{
 		
+		System.out.println(jwtToken);
+		
+		if(jwtToken==null || jwtToken.startsWith("Bearer")==false) {
+			throw new Exception("Unauthorized.you are not allowed to do this operation");
+			
+		}
+		System.out.println(jwtToken);
+		
+		jwtToken=jwtToken.substring(7);
+		System.out.println(jwtToken);
+		
+		Boolean isTokenValid = jwtService.verifyJwtToken(jwtToken);
+		System.out.println(isTokenValid);
+		
+		Claims claims = jwtService.getJwtClaims(jwtToken);
+		System.out.println(claims);
 		
 		fileUploadService.imageUpload(inputFile);
 		

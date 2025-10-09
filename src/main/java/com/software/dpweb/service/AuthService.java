@@ -1,5 +1,7 @@
 package com.software.dpweb.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.software.dpweb.dto.UserLoginResponse;
 import com.software.dpweb.entity.User;
 import com.software.dpweb.pojo.ForgotPasswordAPIData;
 import com.software.dpweb.pojo.LoginAPIData;
@@ -24,6 +25,9 @@ public class AuthService {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
@@ -53,7 +57,7 @@ public class AuthService {
 	
 	
 	
-	public Object userLogIn(LoginAPIData loginAPIData) throws Exception {
+	public Map<String, Object> userLogIn(LoginAPIData loginAPIData) throws Exception {
 		
 		Optional<User> dbData = userRepository.findByEmail(loginAPIData.getEmail());
 		
@@ -62,15 +66,13 @@ public class AuthService {
 		}else {
 			User userData = dbData.get();
 			boolean isMatches = passwordEncoder.matches(loginAPIData.getPassword(), userData.getPassword());
-			if(isMatches) {
-				return new UserLoginResponse(
-						userData.getName(),
-						userData.getEmail(),
-						userData.getMobile(),
-						userData.getCreatedOn()
-						
-						
-						);
+			
+			if(isMatches == true) {
+				String jwtToken = jwtService.generateJwtToken(userData);
+				Map<String, Object> response = new HashMap<>();
+				response.put("token", jwtToken);
+				response.put("userData", userData);
+				return response;
 			}else {
 				throw new Exception("password is not matching..Please try again");
 			}
