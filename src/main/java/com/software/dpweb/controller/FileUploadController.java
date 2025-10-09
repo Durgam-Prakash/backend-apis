@@ -30,7 +30,7 @@ public class FileUploadController {
 		Map<String,Object> responseMap = new HashMap<>();
 		responseMap.put("Result", "Success");
 		responseMap.put("Message", "image uploaded Successfully....!");
-		//responseMap.put("Data", inputFile);
+		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
 
@@ -48,7 +48,7 @@ public class FileUploadController {
 		Map<String,Object> responseMap = new HashMap<>();
 		responseMap.put("Result", "Success");
 		responseMap.put("Message", "pdf file uploaded Successfully....!");
-		responseMap.put("Data", file);
+		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
 

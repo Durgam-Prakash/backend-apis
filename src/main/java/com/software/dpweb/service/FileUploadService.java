@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,7 +25,8 @@ public class FileUploadService {
 	private int MAX_ALLOWED_IMAGE_SIZE = 5 * 1024 * 1024;
 	private int MAX_ALLOWED_PDF_SIZE = 10 * 1024 * 1024;
 	
-	
+	@Autowired
+	private S3FileService s3FileService;
 	
 	public void imageUpload(MultipartFile inputFile) throws Exception {
 		
@@ -70,6 +72,7 @@ public class FileUploadService {
 		
 		Path uploadPath = Paths.get(PDF_UPLOAD_PATH +uploadPdfFileName);
 		Files.copy(inputFile.getInputStream(), uploadPath);
+		s3FileService.uploadFileToS3(inputFile, uploadPdfFileName);
 		
 	}
 
