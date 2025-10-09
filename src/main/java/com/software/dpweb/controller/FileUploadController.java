@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.software.dpweb.service.CsvToDbService;
 import com.software.dpweb.service.FileUploadService;
 import com.software.dpweb.service.JwtService;
 
@@ -28,6 +29,9 @@ public class FileUploadController {
 	@Autowired
 	private JwtService jwtService;
 	
+	
+	@Autowired
+	private CsvToDbService csvToDbService;
 
 	@PostMapping("/images")
 	public ResponseEntity<?> uploadImages(@RequestHeader("Authorization")String jwtToken, @RequestParam("input_file") MultipartFile inputFile) throws Exception{
@@ -78,6 +82,21 @@ public class FileUploadController {
 
 		
 		
+	}
+	
+	
+	
+	
+	@PostMapping("/csvToDb")
+	public ResponseEntity<?> uploadCsvToDb(@RequestParam("csv_file") MultipartFile inputCsvFile) throws Exception{
+		
+		csvToDbService.handleCsvUploadToDb(inputCsvFile);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("Result","Success");
+		response.put("Message", "CSV file imported to DB ");
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 }
