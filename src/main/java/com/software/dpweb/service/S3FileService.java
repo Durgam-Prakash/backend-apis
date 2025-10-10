@@ -1,5 +1,7 @@
 package com.software.dpweb.service;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +45,15 @@ public class S3FileService {
 		
 		PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName).key(fileName).build();
 		s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputFile.getInputStream() , inputFile.getSize()));
+		
+	}
+
+	
+	
+public void uploadLogFilesToS3(File inputFile,String fileName) throws Exception {
+		
+		PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName).key(fileName).build();
+		s3Client.putObject(putObjectRequest,inputFile.toPath() );
 		
 	}
 
