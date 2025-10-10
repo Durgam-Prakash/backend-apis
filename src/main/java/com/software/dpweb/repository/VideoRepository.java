@@ -16,9 +16,6 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 	@Query("select v from Video v where v.title like %:searchWord% ")
 	List<Video> searchVideos(@Param("searchWord") String searchWord);
 	
-//
-//	@Query("SELECT v FROM Video v WHERE v.title LIKE CONCAT('%', :searchWord, '%')")
-//	List<Video> searchVideos(@Param("searchWord") String searchWord);
 
 
 

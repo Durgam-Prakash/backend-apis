@@ -12,30 +12,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.software.dpweb.dto.VideoDto;
-import com.software.dpweb.pojo.VideoSearchApiData;
-import com.software.dpweb.service.VideoService;
+import com.software.dpweb.entity.Vehicle;
+import com.software.dpweb.pojo.VehiclesSearchApiData;
+import com.software.dpweb.service.VehiclesService;
 import com.software.dpweb.utils.ResponseData;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/video")
-public class VideoController {
+@RequestMapping("/api/vehicle")
+public class VehiclesController {
+	
 	
 	@Autowired
-	private VideoService videoService;
-	
+	private VehiclesService vehiclesService;
+
 	@PostMapping("/search")
-	public ResponseEntity<?> videoSearch(@Valid @RequestBody VideoSearchApiData videoSearchApiData){
+	public ResponseEntity<?> searchVehicles(@Valid @RequestBody VehiclesSearchApiData vehiclesSearchApiData){
 		
-		List<VideoDto> videoSearch = videoService.videoSearch(videoSearchApiData);
+		List<Vehicle> hanldeVehiclesSearch = vehiclesService.hanldeVehiclesSearch(vehiclesSearchApiData);
+		
 		Map<String, Object> response = new HashMap<>();
 		response.put(ResponseData.RESULT, ResponseData.SUCCESS);
-		response.put("Message", "video Detaisl");
-		response.put("Data", videoSearch);
+		response.put(ResponseData.MESSAGE, "Vehicles Details are");
+		response.put(ResponseData.DATA, hanldeVehiclesSearch);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-
+	
+	
 }
