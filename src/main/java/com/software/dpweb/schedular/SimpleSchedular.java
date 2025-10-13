@@ -15,7 +15,7 @@ public class SimpleSchedular {
 	private S3FileService s3FileService;
 	
 	
-	@Scheduled(fixedRate = 5000)
+	//@Scheduled(fixedRate = 5000)
 	public void printSomeData() {
 		System.out.println("this is running from schedualr........!");
 	}
@@ -24,7 +24,7 @@ public class SimpleSchedular {
 	//cron - "seconds(0-59), minutes(0-59), hours(0-23), date(0-30),month(0-11), week-day(SUN , MON)"
 	
 //	@Scheduled(cron = "0 0 1 * * *")
-	@Scheduled(fixedRate = 1000000)
+	//@Scheduled(fixedRate = 1000000)
 	public void uploadLogsToS3() throws Exception {
 		
 		/*
