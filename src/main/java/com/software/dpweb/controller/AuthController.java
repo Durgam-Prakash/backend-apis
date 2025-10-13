@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.software.dpweb.pojo.ForgotPasswordAPIData;
 import com.software.dpweb.pojo.IpData;
 import com.software.dpweb.pojo.LoginAPIData;
+import com.software.dpweb.pojo.MoneyTransferApiData;
 import com.software.dpweb.pojo.ResetPassword;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.service.AuthService;
 import com.software.dpweb.service.IpDataService;
+import com.software.dpweb.utils.ResponseData;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -94,6 +96,20 @@ public class AuthController {
 		responseMap.put("Result", "Success");
 		responseMap.put("Message", "sent an email please check for rest your password");
 		responseMap.put("Data", resetPassword);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		
+	}
+	
+	
+	@PostMapping("/transfer")
+	public ResponseEntity<?> transferMoney(@RequestBody MoneyTransferApiData moneyTransferApiData) throws Exception{
+		
+		authService.moneyTransfer(moneyTransferApiData);
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put(ResponseData.RESULT, ResponseData.SUCCESS);
+		responseMap.put("Message", "Amount transfered successfully ");
+		responseMap.put("Data", moneyTransferApiData);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
 		

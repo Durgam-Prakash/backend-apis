@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.software.dpweb.entity.User;
 import com.software.dpweb.pojo.ForgotPasswordAPIData;
 import com.software.dpweb.pojo.LoginAPIData;
+import com.software.dpweb.pojo.MoneyTransferApiData;
 import com.software.dpweb.pojo.ResetPassword;
 import com.software.dpweb.pojo.SignupAPIData;
 import com.software.dpweb.repository.UserRepository;
@@ -137,5 +139,32 @@ public class AuthService {
 		
 	}
 	
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void moneyTransfer(MoneyTransferApiData moneyTransferApiData) throws Exception {
+		Optional<User> byAccountNumber = userRepository.findByAccountNumber(moneyTransferApiData.getFromAccount());
+		
+		if(byAccountNumber.isEmpty()) {
+			throw new Exception("Account number is not found....");
+		}
+		
+		User fromUser = byAccountNumber.get();
+		Double balance = fromUser.getBalance() - moneyTransferApiData.getAmount();
+		fromUser.setBalance(balance);
+		userRepository.save(fromUser);
+		
+		byAccountNumber = userRepository.findByAccountNumber(moneyTransferApiData.getToAccount());
+		
+		if(byAccountNumber.isEmpty()) {
+			throw new Exception("to account is not found");
+		}
+		
+		
+		User toUser = byAccountNumber.get();
+		balance = toUser.getBalance() + moneyTransferApiData.getAmount();
+		toUser.setBalance(balance);
+		
+		userRepository.save(toUser);
+	}
 
 }

@@ -39,4 +39,8 @@ public class User {
 	private Boolean isActive = true;
 	private Boolean isEmailVerified = false;
 
+	
+	
+	private String accountNumber;
+	private Double balance;
 }
