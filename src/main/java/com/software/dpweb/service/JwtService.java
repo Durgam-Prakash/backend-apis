@@ -34,7 +34,7 @@ public class JwtService {
 	@Value("${jwt.secret.key}")
 	private String jwtSecretKey;
 	
-	private int JWT_TOKEN_VALIDITY= 50 * 1000;
+	private int JWT_TOKEN_VALIDITY= 60 * 60 * 1000;
 	
 	
 	
@@ -58,7 +58,7 @@ public class JwtService {
 		tokenData.put("id", userData.getId());
 		tokenData.put("name",userData.getName());
 		tokenData.put("email", userData.getEmail());
-		
+		tokenData.put("role","STUDENT");
 		String jwtToken = Jwts.builder()
 		.claims()
 		.add(tokenData)
