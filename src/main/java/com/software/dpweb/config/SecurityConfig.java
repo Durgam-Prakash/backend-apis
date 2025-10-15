@@ -27,6 +27,8 @@ public class SecurityConfig {
 		
 		.authorizeHttpRequests(auth->
 		        auth.requestMatchers("/auth/login","/auth/create-account").permitAll()
+		        .requestMatchers("/api/video/search").permitAll()
+		        .requestMatchers("/actuator/**").permitAll()
 		     // auth.requestMatchers("/auth/**").permitAll()
 		        .requestMatchers("/student/**").hasRole("STUDENT")
 		        .requestMatchers("/admin/**").hasRole("ADMIN")
