@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,10 @@ public class AuthService {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	
 	
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
@@ -167,4 +172,25 @@ public class AuthService {
 		userRepository.save(toUser);
 	}
 
+	
+	
+	
+	
+	/* this is the code to get data from Redis by using Redis*/
+	
+	public User getUserData(Long id) {
+		User user = (User)redisTemplate.opsForValue().get("USER_" +id);
+		
+		System.out.println(user);
+		if(user==null) {
+			System.out.println("Getting data from DB");
+			Optional<User> optData = userRepository.findById(id);
+			if(optData.isEmpty()==false) {
+				user=optData.get();
+				redisTemplate.opsForValue().set("USER_" +id, optData);
+			}
+		}
+		return user;
+	}
+	
 }

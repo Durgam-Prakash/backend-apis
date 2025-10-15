@@ -26,7 +26,7 @@ public class SecurityConfig {
 		.csrf(csrf->csrf.disable())
 		
 		.authorizeHttpRequests(auth->
-		        auth.requestMatchers("/auth/login","/auth/create-account").permitAll()
+		        auth.requestMatchers("/auth/login","/auth/create-account","/auth/user/**").permitAll()
 		        .requestMatchers("/api/video/search").permitAll()
 		        .requestMatchers("/actuator/**").permitAll()
 		     // auth.requestMatchers("/auth/**").permitAll()

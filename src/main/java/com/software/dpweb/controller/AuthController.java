@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.dpweb.entity.User;
 import com.software.dpweb.pojo.ForgotPasswordAPIData;
 import com.software.dpweb.pojo.IpData;
 import com.software.dpweb.pojo.LoginAPIData;
@@ -110,6 +113,23 @@ public class AuthController {
 		responseMap.put(ResponseData.RESULT, ResponseData.SUCCESS);
 		responseMap.put("Message", "Amount transfered successfully ");
 		responseMap.put("Data", moneyTransferApiData);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		
+	}
+	
+	
+	
+	/* this is the code to get data from Redis by using Redis*/
+	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<?> getUserData(@PathVariable Long id){
+		User userData = authService.getUserData(id);
+		
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put(ResponseData.RESULT, ResponseData.SUCCESS);
+		responseMap.put("Message", "user data get from redis successfully ");
+		responseMap.put("Data",userData );
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
 		
